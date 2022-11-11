@@ -1,4 +1,4 @@
-module github.com/go-playground/validator/v10
+module github.com/payon-sdk/validator
 
 go 1.13
 
