@@ -330,7 +330,7 @@ func (v *Validate) RegisterCustomTypeFunc(fn CustomTypeFunc, types ...interface{
 
 // RegisterTranslation registers translations against the provided tag.
 func (v *Validate) RegisterTranslation(tag string, trans ut.Translator, registerFn RegisterTranslationsFunc, translationFn TranslationFunc) (err error) {
-
+	var mutex = &sync.Mutex{}
 	if v.transTagFunc == nil {
 		v.transTagFunc = make(map[ut.Translator]map[string]TranslationFunc)
 	}
@@ -344,8 +344,9 @@ func (v *Validate) RegisterTranslation(tag string, trans ut.Translator, register
 		m = make(map[string]TranslationFunc)
 		v.transTagFunc[trans] = m
 	}
-
-	m[tag] = translationFn
+	mutex.Lock()
+	m[tag] = translationFn			
+	mutex.Unlock()
 
 	return
 }
